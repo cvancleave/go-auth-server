@@ -1,12 +1,5 @@
 package server
 
-type server struct {
-	port      int
-	secretKey string
-	issuer    string
-	audience  string
-}
-
 type TokenResponse struct {
 	AccessToken  string `json:"access_token"`
 	TokenType    string `json:"token_type"`

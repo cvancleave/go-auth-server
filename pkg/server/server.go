@@ -2,13 +2,19 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/cvancleave/go-auth-server/pkg/utils"
 	"github.com/julienschmidt/httprouter"
 )
+
+type server struct {
+	port      int
+	secretKey string
+	issuer    string
+	audience  string
+}
 
 func Start() {
 
@@ -23,18 +29,17 @@ func Start() {
 		audience:  "go-auth-server-user",
 	}
 
-	// set up server
 	srv := &http.Server{
 		Addr:        fmt.Sprintf(":%d", s.port),
 		Handler:     s.routes(),
 		IdleTimeout: time.Minute,
 	}
 
-	fmt.Println("starting go-auth-server server on port:", s.port)
+	fmt.Println("starting go-auth-server on port:", s.port)
 
 	// serve
 	if err := srv.ListenAndServe(); err != nil {
-		log.Fatalf("error starting go-auth-server server: %s", err.Error())
+		panic(err)
 	}
 }
 
@@ -45,7 +50,7 @@ func (s *server) routes() *httprouter.Router {
 	router.POST("/oauth/token", s.handleTokenRequest) // standard oauth endpoint
 	router.POST("/validate", s.handleValidateRequest) // example of jwt validation
 
-	// Allow CORS for non-GET methods
+	// allow cors for non-get methods
 	router.GlobalOPTIONS = http.HandlerFunc(options)
 
 	return router
