@@ -16,14 +16,14 @@ type server struct {
 	audience  string
 }
 
-func Start() {
+func Start(port int) {
 
 	// private encryption key - usually gotten from a secret store
 	secretKey := "ellipsis"
 
 	// set up server
 	s := &server{
-		port:      4001,
+		port:      port,
 		secretKey: secretKey,
 		issuer:    "go-auth-server",
 		audience:  "go-auth-server-user",
